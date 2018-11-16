@@ -1,24 +1,28 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import QVSTA from './Assets/QVSTA.png';
 import './App.css';
+import { instagramClientId, redirectUri } from './Strings';
 
 class App extends Component {
   render() {
+    let InstagramLink = `https://api.instagram.com/oauth/authorize/?client_id=${instagramClientId}&redirect_uri=${redirectUri}&response_type=token`;
     return (
+
       <div className="App">
-        <header className="App-header"> 
-          <img src={logo} className="App-logo" alt="logo" />
+        <header className="App-header">
+          <img src={QVSTA} className="App-logo" alt="logo" />
           <p>
-            Edit <code>src/App.js</code> and save to reload.
+            Welcome to Mohamed Assaf's Task!
           </p>
           <a
             className="App-link"
-            href="https://reactjs.org"
+            href={InstagramLink}
             target="_blank"
             rel="noopener noreferrer"
           >
-            Welcome to react!
+            Would you sign in to instagram already?
           </a>
+          <a href="/AuthToken">Auth</a>
         </header>
       </div>
     );
