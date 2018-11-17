@@ -1,30 +1,42 @@
 import React, { Component } from 'react';
-import './App.css';
-import qs from 'query-string';
 import { Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { AuthTokenChanged } from './Actions';
+import qs from 'query-string';
 import * as _ from 'lodash';
+import './App.css';
 
-let authToken;
 class HomePage extends Component {
     constructor(props) {
         super(props);
-        authToken = qs.parse(window.location.hash);
+        let authToken = qs.parse(window.location.hash);
+        this.props.AuthTokenChanged(authToken);
     }
     redirect() {
-        if(_.isEmpty(authToken)){
+        if (this.props.authToken) {
+            console.log(this.props.authToken.access_token);
+        }
+        if (_.isEmpty(this.props.location.hash)) {
             return (
                 <Redirect to="/" />
             )
         }
     }
+
     render() {
         return (
             <div>
                 {this.redirect()}
-                <h1>HEYYYY</h1>
+                <h1>Heyyy</h1>
             </div>
         )
     }
 }
 
-export default HomePage;
+const mapStateToProps = state => {
+    return {
+        authToken: state.authToken
+    }
+}
+
+export default connect(mapStateToProps, { AuthTokenChanged })(HomePage);

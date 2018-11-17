@@ -5,15 +5,20 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import HomePage from './HomePage';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import configureStore from './ConfigureStore';
 
+let store = configureStore();
 
 ReactDOM.render(
-    <Router>
-        <Switch>
-            <Route exact path="/" component={App} />
-            <Route path="/AuthToken" component={HomePage} />
-        </Switch>
-    </Router>
+    <Provider store={store}>
+        <Router>
+            <Switch>
+                <Route exact path="/" component={App} />
+                <Route path="/AuthToken" component={HomePage} />
+            </Switch>
+        </Router>
+    </Provider>
     , document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
