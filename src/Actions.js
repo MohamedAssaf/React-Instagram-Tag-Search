@@ -4,3 +4,16 @@ export const AuthTokenChanged = (AuthToken) => {
         payload: AuthToken
     }
 }
+
+export const TagsChanged = (tags) =>{
+    return {
+        type: 'tagsChanged',
+        payload: tags
+    }
+}
+
+export const ToggleSearchMode = () =>{
+    return {
+        type: 'toggleSearchMode'
+    }
+}

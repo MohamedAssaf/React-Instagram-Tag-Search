@@ -5,7 +5,7 @@ import { instagramClientId, redirectUri } from './Strings';
 
 class App extends Component {
   render() {
-    let InstagramLink = `https://api.instagram.com/oauth/authorize/?client_id=${instagramClientId}&redirect_uri=${redirectUri}&response_type=token`;
+    let InstagramLink = `https://api.instagram.com/oauth/authorize/?client_id=${instagramClientId}&redirect_uri=${redirectUri}&response_type=token&scope=public_content `;
     return (
 
       <div className="App">
