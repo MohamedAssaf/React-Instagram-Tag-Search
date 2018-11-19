@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/React-Instagram-Tag-Search/precache-manifest.605ebfdc68830a35948ec1ef864f6417.js"
+  "/React-Instagram-Tag-Search/precache-manifest.d7b2f44c9e6113c0c11e9db7d411482d.js"
 );
 
 workbox.clientsClaim();
