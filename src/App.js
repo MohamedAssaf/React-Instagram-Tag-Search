@@ -3,6 +3,7 @@ import QVSTA from './Assets/QVSTA.png';
 import './App.css';
 import { instagramClientId, redirectUri } from './Strings';
 
+
 class App extends Component {
   render() {
     let InstagramLink = `https://api.instagram.com/oauth/authorize/?client_id=${instagramClientId}&redirect_uri=${redirectUri}&response_type=token&scope=public_content `;
@@ -22,7 +23,6 @@ class App extends Component {
           >
             Would you sign in to instagram already?
           </a>
-          <a href="/AuthToken">Auth</a>
         </header>
       </div>
     );
