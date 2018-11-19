@@ -3,7 +3,6 @@ import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { AuthTokenChanged, TagsChanged, ToggleSearchMode, StoreSearchResult } from './Actions';
 import qs from 'query-string';
-import * as request from 'request-promise';
 import * as _ from 'lodash';
 import './App.css';
 
@@ -73,7 +72,7 @@ class HomePage extends Component {
                                 {`${user.username} : ${user.value}`}
                             </li>)
                         })}
-                        <button onClick={this.returnToSearchMode.bind(this)} > Search Again! </button>
+                        <button className="Button CenterButton" onClick={this.returnToSearchMode.bind(this)} > Search Again! </button>
                     </ul>
                 )
             }
@@ -88,18 +87,17 @@ class HomePage extends Component {
                     {/* {for(let key in this.props.searchResult ){
                         
                     }} */}
-                    <button onClick={this.returnToSearchMode.bind(this)} > Search Again! </button>
+                    <button className="Button" onClick={this.returnToSearchMode.bind(this)} > Search Again! </button>
                 </div>
             )
         }
         return (
             <form onSubmit={this.search.bind(this)}>
-                <label>
+                <label className="Label" >
                     Tags:
-                <input type="text" value={this.props.tags} onChange={this.tagChanged.bind(this)} />
+                <input className="TextBox" type="text"  value={this.props.tags} onChange={this.tagChanged.bind(this)} />
                 </label>
-                <button type="submit" value="Submit">Let's fire this baby up </button>
-
+                <button className="Button" type="submit" value="Submit">Search ? </button>
             </form>
         )
     }
