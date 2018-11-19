@@ -1,49 +1,54 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { AuthTokenChanged, TagsChanged, ToggleSearchMode } from './Actions';
+import { AuthTokenChanged, TagsChanged, ToggleSearchMode, StoreSearchResult } from './Actions';
 import qs from 'query-string';
+import * as request from 'request-promise';
 import * as _ from 'lodash';
 import './App.css';
 
+let value = "Hey";
 class HomePage extends Component {
-    searchResults = {};
     constructor(props) {
         super(props);
         let authToken = qs.parse(window.location.hash);
         this.props.AuthTokenChanged(authToken);
     }
 
-    search(event) {
+    async search(event) {
+        this.props.ToggleSearchMode();
+        let searchResult = {};
         event.preventDefault();
         let tags = this.props.tags.split(" ");
-        let urls = [];
-        let replies = [];
-        _.forEach(tags, (tag) => {
-            urls.push(`https://api.instagram.com/v1/tags/${tag}/media/recent?access_token=276779180.f4c3474.efdb4c44585740a08597f9f406126d85`)
+        await _.forEach(tags, async tag => {
+            let data = await fetch(`https://api.instagram.com/v1/tags/${tag}/media/recent?access_token=${this.props.authToken.access_token}`);
+            data.json().then((response) => {
+                if (!_.isEmpty(response.data)) {
+                    _.forEach(response.data, (post) => {
+                        let { user } = post;
+                        if (!searchResult[user.full_name]) {
+                            searchResult[user.full_name] = 1;
+                        }
+                        else {
+                            searchResult[user.full_name] += 1;
+                        }
+                        this.props.StoreSearchResult(searchResult);
+                        console.table(this.props.searchResult);
+                    });
+                };
+            });
         })
-        urls.map(url => fetch(url).then(response => {
-            response.json().then(respBody => {
-                replies.push(respBody);
-            })
-        }));
-        Promise.all(urls).then(allData => {
-            console.log(replies);
-            this.props.ToggleSearchMode();
-        });
-
     }
 
     tagChanged(event) {
         this.props.TagsChanged(event.target.value);
-        console.log(this.props.authToken)
     }
 
     returnToSearchMode() {
         this.props.ToggleSearchMode();
     }
-    
-    
+
+
     redirect() {
         //if the page is called with empty parameters or no parameters at all 
         if (_.isEmpty(this.props.location.hash)) {
@@ -53,11 +58,36 @@ class HomePage extends Component {
         }
     }
 
-    renderHelper() {
+    renderHelper(props) {
         if (this.props.searchMode) {
+            let { searchResult } = this.props;
+            if (!_.isEmpty(searchResult)) {
+                let users = Object.keys(searchResult).map(function (key) {
+                    return { username: key, value: searchResult[key] };
+                });
+                return(
+                    <ul>
+                        {users.map(user => {
+                            return(
+                            <li>
+                                {`${user.username} : ${user.value}`}
+                            </li>)
+                        })}
+                        <button onClick={this.returnToSearchMode.bind(this)} > Search Again! </button>
+                    </ul>
+                )
+            }
+            // for(let username in searchResult){
+            //     if( searchResult.hasOwnProperty(username)){
+
+            //     }
+            // }
+
             return (
                 <div>
-                    <h1>Heyyyy</h1>
+                    {/* {for(let key in this.props.searchResult ){
+                        
+                    }} */}
                     <button onClick={this.returnToSearchMode.bind(this)} > Search Again! </button>
                 </div>
             )
@@ -78,7 +108,7 @@ class HomePage extends Component {
         return (
             <div className="App App-header" >
                 {this.redirect()}
-                {this.renderHelper()}
+                {this.renderHelper(this.props)}
             </div>
         )
     }
@@ -88,8 +118,9 @@ const mapStateToProps = state => {
     return {
         authToken: state.authToken,
         tags: state.tags,
-        searchMode: state.searchMode
+        searchMode: state.searchMode,
+        searchResult: state.searchResult
     }
 }
 
-export default connect(mapStateToProps, { AuthTokenChanged, TagsChanged, ToggleSearchMode })(HomePage);
+export default connect(mapStateToProps, { AuthTokenChanged, TagsChanged, ToggleSearchMode, StoreSearchResult })(HomePage);
