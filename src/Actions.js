@@ -17,3 +17,10 @@ export const ToggleSearchMode = () =>{
         type: 'toggleSearchMode'
     }
 }
+
+export const StoreSearchResult = (result) => {
+    return {
+        type: 'storeSearchResult',
+        payload : result
+    }
+}

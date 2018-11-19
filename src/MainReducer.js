@@ -1,7 +1,8 @@
 const INITIAL_STATE = {
     authToken : '',
     tags : '',
-    searchMode : false
+    searchMode : false,
+    searchResult : {}
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -12,6 +13,8 @@ export default (state = INITIAL_STATE, action) => {
             return {...state, tags: action.payload}
         case 'toggleSearchMode' : 
             return {...state, searchMode : !state.searchMode}
+        case 'storeSearchResult' : 
+            return {...state, searchResult : action.payload}
         default:
             return state;
     }
